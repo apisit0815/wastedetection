@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมจำแนกรูปขยะ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>โปรแกรมทดสอบโมเดลจำแนกรูปขยะ</h1>
+
+        <p class="instructions">
+            <b>คำชี้แจง:</b> โปรแกรมใช้สำหรับตรวจจับภาพขยะเพื่อแยกประเภท Recycle, Organic, General, Hazardous และไม่ทราบ (Null or Background) โปรดเลือกภาพจากเครื่องหรือเปิดกล้องถ่ายภาพขยะ
+        </p>
+
+        <div id="input-options">
+            <button id="browse-btn">เลือกรูปจากเครื่อง</button>
+            <button id="camera-btn">เปิดกล้อง</button>
+        </div>
+
+        <div id="status">กำลังเริ่มต้น...</div>
+
+        <input type="file" id="image-upload" accept="image/*" style="display: none;"/>
+
+        <div id="camera-container" style="display: none;">
+            <video id="video-preview" width="100%" height="auto" autoplay playsinline></video>
+            <button id="capture-btn">ถ่ายภาพ</button>
+            <button id="close-camera-btn">ปิดกล้อง</button>
+        </div>
+
+        <div>
+            <img id="image-preview" src="" />
+        </div>
+
+        <div id="label-container"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script src="script.js" defer></script>
+</body>
+</html>
