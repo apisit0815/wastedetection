@@ -1,0 +1,121 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    margin: 20px 10px;
+    background-color: #f7f7f7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.instructions {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+#status {
+    margin: 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+}
+
+#label-container {
+    margin-top: 20px;
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+#input-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#capture-btn {
+    background-color: #28a745;
+}
+#capture-btn:hover {
+    background-color: #218838;
+}
+
+#close-camera-btn {
+    background-color: #dc3545;
+}
+#close-camera-btn:hover {
+    background-color: #c82333;
+}
+
+@media (max-width: 600px) {
+    body {
+        margin-top: 10px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    #input-options {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #input-options button {
+        width: 80%;
+    }
+
+    #status {
+        font-size: 16px;
+    }
+
+    #label-container {
+        font-size: 18px;
+    }
+}
