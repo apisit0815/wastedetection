@@ -82,6 +82,14 @@ button:hover {
     background-color: #218838;
 }
 
+/* ✅ เพิ่มสไตล์สำหรับปุ่มสลับกล้อง */
+#switch-camera-btn {
+    background-color: #ff9800; /* สีส้ม */
+}
+#switch-camera-btn:hover {
+    background-color: #f57c00;
+}
+
 #close-camera-btn {
     background-color: #dc3545;
 }
