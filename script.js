@@ -2,8 +2,7 @@
 const URL = "https://teachablemachine.withgoogle.com/models/kOI6h0QV-/";
 
 let model, maxPredictions, stream;
-// ✅ เพิ่มตัวแปรเพื่อเก็บสถานะของกล้อง (user=หน้า, environment=หลัง)
-let currentFacingMode = 'environment'; 
+let currentFacingMode = 'environment'; // เริ่มต้นด้วยกล้องหลัง
 
 // อ้างอิงถึง element ต่างๆ ในหน้าเว็บ
 const statusDiv = document.getElementById("status");
@@ -17,7 +16,6 @@ const cameraContainer = document.getElementById("camera-container");
 const videoPreview = document.getElementById("video-preview");
 const captureBtn = document.getElementById("capture-btn");
 const closeCameraBtn = document.getElementById("close-camera-btn");
-// ✅ อ้างอิงถึงปุ่มสลับกล้อง
 const switchCameraBtn = document.getElementById("switch-camera-btn"); 
 
 // ฟังก์ชันเริ่มต้นระบบ: โหลดโมเดล AI
@@ -38,15 +36,17 @@ async function init() {
     }
 }
 
-// ✅ ปรับปรุงฟังก์ชันเปิดกล้องให้รับ facingMode ได้
 async function startCamera() {
-    // หยุด stream เก่าก่อนเปิดอันใหม่ (สำคัญตอนสลับกล้อง)
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
     }
 
+    // ✅✅✅ ---- จุดที่แก้ไข ---- ✅✅✅
+    // เปลี่ยนเงื่อนไขให้เจาะจงด้วย 'exact' เพื่อบังคับให้สลับกล้อง
     const constraints = {
-        video: { facingMode: currentFacingMode }
+        video: { 
+            facingMode: { exact: currentFacingMode }
+        }
     };
 
     try {
@@ -60,15 +60,21 @@ async function startCamera() {
         statusDiv.innerHTML = "จัดตำแหน่งแล้วกด 'ถ่ายภาพ'";
     } catch (e) {
         console.error("เกิดข้อผิดพลาดในการเข้าถึงกล้อง:", e);
-        statusDiv.innerHTML = "ไม่สามารถเข้าถึงกล้องได้";
-        statusDiv.classList.add("error");
+        // อาจเกิดข้อผิดพลาดถ้าอุปกรณ์ไม่มีกล้องหลัง ลองสลับไปกล้องหน้าแทน
+        if (currentFacingMode === 'environment') {
+            console.log("ไม่พบกล้องหลัง ลองสลับไปใช้กล้องหน้า");
+            switchCamera(); 
+        } else {
+            statusDiv.innerHTML = "ไม่สามารถเข้าถึงกล้องได้";
+            statusDiv.classList.add("error");
+        }
     }
 }
 
-// ✅ ฟังก์ชันใหม่สำหรับสลับกล้อง
+// ฟังก์ชันใหม่สำหรับสลับกล้อง
 function switchCamera() {
     currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
-    startCamera(); // เรียกใช้กล้องอีกครั้งด้วยโหมดใหม่
+    startCamera(); 
 }
 
 function closeCamera() {
@@ -137,7 +143,6 @@ browseBtn.addEventListener("click", () => imageUpload.click());
 cameraBtn.addEventListener("click", startCamera);
 captureBtn.addEventListener("click", captureImage);
 closeCameraBtn.addEventListener("click", closeCamera);
-// ✅ เพิ่ม Event Listener สำหรับปุ่มสลับกล้อง
 switchCameraBtn.addEventListener("click", switchCamera);
 
 // เริ่มการทำงานทั้งหมด
