@@ -2,6 +2,8 @@
 const URL = "https://teachablemachine.withgoogle.com/models/kOI6h0QV-/";
 
 let model, maxPredictions, stream;
+// ✅ เพิ่มตัวแปรเพื่อเก็บสถานะของกล้อง (user=หน้า, environment=หลัง)
+let currentFacingMode = 'environment'; 
 
 // อ้างอิงถึง element ต่างๆ ในหน้าเว็บ
 const statusDiv = document.getElementById("status");
@@ -15,6 +17,8 @@ const cameraContainer = document.getElementById("camera-container");
 const videoPreview = document.getElementById("video-preview");
 const captureBtn = document.getElementById("capture-btn");
 const closeCameraBtn = document.getElementById("close-camera-btn");
+// ✅ อ้างอิงถึงปุ่มสลับกล้อง
+const switchCameraBtn = document.getElementById("switch-camera-btn"); 
 
 // ฟังก์ชันเริ่มต้นระบบ: โหลดโมเดล AI
 async function init() {
@@ -26,7 +30,7 @@ async function init() {
         model = await tmImage.load(modelURL, metadataURL);
         maxPredictions = model.getTotalClasses();
         statusDiv.innerHTML = "เลือกวิธีการป้อนรูปภาพ";
-        inputOptions.style.display = 'flex'; // แสดงปุ่มเลือก
+        inputOptions.style.display = 'flex';
     } catch (e) {
         console.error(e);
         statusDiv.innerHTML = "เกิดข้อผิดพลาด: ไม่สามารถโหลดโมเดลได้";
@@ -34,10 +38,19 @@ async function init() {
     }
 }
 
-// ฟังก์ชันสำหรับเปิดกล้อง
+// ✅ ปรับปรุงฟังก์ชันเปิดกล้องให้รับ facingMode ได้
 async function startCamera() {
+    // หยุด stream เก่าก่อนเปิดอันใหม่ (สำคัญตอนสลับกล้อง)
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+
+    const constraints = {
+        video: { facingMode: currentFacingMode }
+    };
+
     try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
         videoPreview.srcObject = stream;
         
         inputOptions.style.display = 'none';
@@ -52,7 +65,12 @@ async function startCamera() {
     }
 }
 
-// ฟังก์ชันสำหรับปิดกล้อง
+// ✅ ฟังก์ชันใหม่สำหรับสลับกล้อง
+function switchCamera() {
+    currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+    startCamera(); // เรียกใช้กล้องอีกครั้งด้วยโหมดใหม่
+}
+
 function closeCamera() {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
@@ -62,7 +80,6 @@ function closeCamera() {
     statusDiv.innerHTML = "เลือกวิธีการป้อนรูปภาพ";
 }
 
-// ฟังก์ชันสำหรับถ่ายภาพจากวิดีโอ
 function captureImage() {
     const canvas = document.createElement("canvas");
     canvas.width = videoPreview.videoWidth;
@@ -75,7 +92,6 @@ function captureImage() {
     closeCamera();
 }
 
-// ฟังก์ชันทำนายผลจากรูปภาพ
 async function predict() {
     if (!model) return;
 
@@ -121,6 +137,8 @@ browseBtn.addEventListener("click", () => imageUpload.click());
 cameraBtn.addEventListener("click", startCamera);
 captureBtn.addEventListener("click", captureImage);
 closeCameraBtn.addEventListener("click", closeCamera);
+// ✅ เพิ่ม Event Listener สำหรับปุ่มสลับกล้อง
+switchCameraBtn.addEventListener("click", switchCamera);
 
 // เริ่มการทำงานทั้งหมด
 init();
