@@ -2,39 +2,48 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรแกรมจำแนกรูปขยะ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Eco-Ranger: ฮีโร่แยกขยะ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>โปรแกรมทดสอบโมเดลจำแนกรูปขยะ</h1>
+    <div class="game-container">
+        <header class="top-bar">
+            <div class="title">🌍 ECO-RANGER</div>
+            <div class="score-board">
+                ⭐ คะแนน: <span id="score">0</span>
+            </div>
+            <div id="combo-badge" class="hidden">🔥 COMBO x2!</div>
+        </header>
 
-        <p class="instructions">
-            <b>คำชี้แจง:</b> โปรแกรมใช้สำหรับตรวจจับภาพขยะเพื่อแยกประเภท Recycle, Organic, General, Hazardous และไม่ทราบ (Null or Background) โปรดเลือกภาพจากเครื่องหรือเปิดกล้องถ่ายภาพขยะ
-        </p>
-
-        <div id="input-options">
-            <button id="browse-btn">เลือกรูปจากเครื่อง</button>
-            <button id="camera-btn">เปิดกล้อง</button>
+        <div class="mascot-section">
+            <div id="mascot" class="bounce">🤖</div>
+            <div id="game-message" class="speech-bubble">สวัสดีฮีโร่! มาช่วยกันแยกขยะเถอะ ถ่ายรูปขยะเพื่อเริ่มภารกิจเลย!</div>
         </div>
 
-        <div id="status">กำลังเริ่มต้น...</div>
+        <div class="screen-area">
+            <div id="status">กำลังเตรียมพร้อม...</div>
+            
+            <div id="camera-container" style="display: none;">
+                <video id="video-preview" autoplay playsinline></video>
+                <div class="camera-controls">
+                    <button id="switch-camera-btn" class="btn-secondary">🔄 สลับกล้อง</button>
+                    <button id="capture-btn" class="btn-action">📸 ถ่ายภาพ!</button>
+                    <button id="close-camera-btn" class="btn-danger">❌ ปิด</button>
+                </div>
+            </div>
 
-        <input type="file" id="image-upload" accept="image/*" style="display: none;"/>
-
-        <div id="camera-container" style="display: none;">
-            <video id="video-preview" width="100%" height="auto" autoplay playsinline></video>
-            <button id="switch-camera-btn">สลับกล้อง</button>
-            <button id="capture-btn">ถ่ายภาพ</button>
-            <button id="close-camera-btn">ปิดกล้อง</button>
+            <img id="image-preview" src="" style="display: none;" />
+            
+            <div id="label-container" class="hidden"></div>
         </div>
 
-        <div>
-            <img id="image-preview" src="" />
+        <div id="input-options" class="control-panel">
+            <button id="camera-btn" class="btn-primary">📷 เปิดกล้องสแกนขยะ</button>
+            <button id="browse-btn" class="btn-secondary">📁 เลือกรูปจากแฟ้ม</button>
+            <input type="file" id="image-upload" accept="image/*" style="display: none;"/>
         </div>
-
-        <div id="label-container"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
